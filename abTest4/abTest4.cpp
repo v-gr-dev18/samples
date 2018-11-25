@@ -1,46 +1,48 @@
 ﻿//============================================================================
-// Name        : abTests3.cpp
+// Name        : abTests4.cpp
 // Author      : vvg
 // Version     :
 // Copyright   : (c) Victor Grigorovich
 // 
 // Дано:
+// Массив чисел и число x:
+// a) массив отсортирован,
+// b) массив не отсортирован.
 // Требуется:
-// Написать программу, печатающую либо число от 1..n, либо
-// - "Knock" вместо кратных 3 или "Bang" вместо кратных 5,
-// либо "KnockBang" вместо кратных и 3, и 5.
+// Найти индексы пары чисел, сумма которых составляет x, либо вернуть false.
 //============================================================================
 
 #include "pch.h"
-
 #include <iostream>
+#include <string.h>
+#include <vector>
 using namespace std;
 
-const int n = 100;
-struct { int val; char const * const str; } subst_a[] =
-{ {3, "Knock"}
-, {5, "Bang"}
-//, {7, "Boom"}
-//, {11, "Hit"}
-};
+const size_t v_size = 100;
 
-int main()
+int main(int argc, char *argv[])
 {
-	for (int i = 1; i <= n; ++i)
-	{
-		bool flag = false;
-		for (int j = 0; j < sizeof(subst_a) / sizeof(subst_a[0]); ++j)
-			if (0 == i % subst_a[j].val)
-			{
-				cout << subst_a[j].str;
-				flag = true;
-			}
-		if (!flag) cout << i;
-		cout << endl;
-	}
+	vector<int> v;
+	const int sum = 200;
+	int term1i, term2i;
+	if (1 == argc)
+		generate_unsort_vector(v, v_size);
+	else if (0 == strcmp(argv[1], "-s"))
+		generate_sort_vector(v, v_size);
+	cout << "v[" << v.size() << "]={";
+	for (unsigned i = 0; i < v.size(); ++i)
+		cout << v[i] << ((i < (v.size() - 1)) ? "," : "");
+	cout << "}" << endl;
+
+	bool ret = false;
+	if (1 == argc)
+		ret = get_2terms(v, sum, term1i, term2i);
+	else if (0 == strcmp(argv[1], "-s"))
+		ret = get_2terms_s(v, sum, term1i, term2i);
+	if (ret) cout << term1i << ", " << term2i << endl;
+	else cout << (ret ? "true" : "false") << endl;
 	return 0;
 }
-
 
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
